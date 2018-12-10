@@ -147,4 +147,38 @@ app.put('/:id', (req, res) => {
 });
 
 
+// =====================================
+// Remove a Task
+// =====================================
+app.delete('/:id', (req, res) => {
+
+    var id = req.params.id;
+
+    Task.findByIdAndRemove(id, (err, removedTask) => {
+
+        if (err) {
+            return res.status(500).json({
+                ok: false,
+                mensaje: 'Error removing task',
+                errors: err
+            });
+        }
+
+        if (!removedTask) {
+            return res.status(400).json({
+                ok: false,
+                mensaje: 'There is no task with that id',
+                errors: { message: 'There is no task with that id' }
+            });
+        }
+
+        res.status(200).json({
+            ok: true,
+            task: removedTask
+        });
+
+    });
+
+});
+
 module.exports = app;
